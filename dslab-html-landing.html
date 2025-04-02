@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSLAB数据科学与人工智能教学平台</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #3b82f6;
+            --accent-color: #60a5fa;
+            --light-color: #f0f9ff;
+            --dark-color: #1e3a8a;
+            --text-color: #334155;
+            --light-text: #64748b;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --border-radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: #f8fafc;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: var(--white);
+            padding: 60px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NiIgaGVpZ2h0PSIxMDAiPgo8cmVjdCB3aWR0aD0iNTYiIGhlaWdodD0iMTAwIiBmaWxsPSIjMWUzYThhIj48L3JlY3Q+CjxwYXRoIGQ9Ik0yOCA2NkwwIDUwTDAgMTZMMjggMEw1NiAxNkw1NiA1MEwyOCA2NkwyOCAxMDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzYwYTVmYSIgc3Ryb2tlLXdpZHRoPSIxIj48L3BhdGg+CjxwYXRoIGQ9Ik0yOCAwazhWMTZIMjBWMCIgZmlsbD0iIzYwYTVmYSI+PC9wYXRoPgo8L3N2Zz4=');
+            opacity: 0.1;
+        }
+        
+        .hero {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 16px;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+        
+        .hero h2 {
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+        
+        .hero h3 {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 12px 24px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: var(--border-radius);
+            display: inline-block;
+        }
+        
+        .section {
+            padding: 64px 0;
+            background-color: var(--white);
+            margin-bottom: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 48px;
+            color: var(--dark-color);
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .section-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .core-values {
+            margin-top: -60px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .core-values-content {
+            padding: 30px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .intro-text {
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+        
+        .intro-text strong {
+            color: var(--primary-color);
+        }
+        
+        .value-list {
+            list-style: none;
+            margin-top: 24px;
+        }
+        
+        .value-list li {
+            margin-bottom: 16px;
+            padding-left: 28px;
+            position: relative;
+        }
+        
+        .value-list li::before {
+            content: "•";
+            color: var(--primary-color);
+            font-size: 24px;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+        
+        .value-list strong {
+            color: var(--primary-color);
+        }
+        
+        .advantage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+        
+        .advantage-card {
+            background-color: var(--light-color);
+            padding: 24px;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .advantage-title {
+            font-size: 1.3rem;
+            margin-bottom: 16px;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .advantage-list {
+            list-style: none;
+        }
+        
+        .advantage-list li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .advantage-list li::before {
+            content: "✓";
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+        }
+        
+        .value-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        
+        .value-card {
+            background-color: var(--white);
+            padding: 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        
+        .value-card-title {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .value-card-text {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+        
+        .scenarios {
+            background-color: var(--light-color);
+            padding: 30px;
+            border-radius: var(--border-radius);
+        }
+        
+        .scenario-title {
+            margin-bottom: 24px;
+            color: var(--dark-color);
+        }
+        
+        .scenario-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        
+        .scenario-list li {
+            background-color: var(--white);
+            padding: 16px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .scenario-list strong {
+            color: var(--dark-color);
+            display: block;
+            margin-bottom: 6px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+        
+        .tagline {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+        }
+        
+        .copyright {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .emoji {
+            font-size: 1.6rem;
+            margin-right: 10px;
+        }
+        
+        .number-badge {
+            background-color: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            margin-right: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.4rem;
+            }
+            
+            .hero h3 {
+                font-size: 1rem;
+            }
+            
+            .advantage-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .value-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="hero">
+                <h1>DSLAB 数据科学与人工智能教学平台</h1>
+                <h2>数字化教学的创新解决方案</h2>
+                <h3>「资源集约管理，教学特色建设，一人一空间，一课一环境」</h3>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="core-values">
+            <div class="core-values-content">
+                <h2 class="section-title">核心价值</h2>
+                <div class="section-content">
+                    <p class="intro-text">
+                        DSLAB是基于项目式学习(PBL)理念打造的<strong>数字化教学平台</strong>，为高校人工智能与数据科学教育提供全方位支持，实现教学资源优化配置与高效共享。
+                    </p>
+                    <ul class="value-list">
+                        <li><strong>教学模式创新</strong>：突破传统机房限制，让师生通过浏览器即可开展高质量实践教学</li>
+                        <li><strong>资源集约管理</strong>：实现计算资源、教学内容的集中调度与共享，大幅提升利用效率</li>
+                        <li><strong>教学特色构建</strong>：帮助院校沉淀优质教学资源，打造专业特色与教学品牌</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">平台优势</h2>
+            <div class="section-content">
+                <div class="advantage-grid">
+                    <div class="advantage-card">
+                        <h3 class="advantage-title"><span class="emoji">🔹</span> 简化教学环境</h3>
+                        <ul class="advantage-list">
+                            <li>浏览器即可完成所有操作，无需复杂软件安装与配置</li>
+                            <li>统一的教学环境确保师生体验一致，消除"我这里能运行"问题</li>
+                            <li>内置AI助教，为学生提供即时学习支持</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="advantage-card">
+                        <h3 class="advantage-title"><span class="emoji">🔹</span> 优化教学资源配置</h3>
+                        <ul class="advantage-list">
+                            <li>计算资源按需分配，避免设备闲置浪费</li>
+                            <li>课程内容、案例与数据集中管理，形成可积累的教学资产</li>
+                            <li>支持Python（pytorch）、Java+SQL、R、Matlab、Stata等多种语言的教学与实践需求</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="advantage-card">
+                        <h3 class="advantage-title"><span class="emoji">🔹</span> 提升管理效能</h3>
+                        <ul class="advantage-list">
+                            <li>一体化课程管理系统整合教、学、练全环节</li>
+                            <li>课程参与度和实验完成情况实时监控，助力教师精准干预学习过程</li>
+                            <li>简化IT运维工作，降低技术支持成本</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="advantage-card">
+                        <h3 class="advantage-title"><span class="emoji">🔹</span> 灵活部署选择</h3>
+                        <ul class="advantage-list">
+                            <li>支持校内数据中心部署，保障数据安全</li>
+                            <li>同时提供基于公有云的服务方案，降低初期投入</li>
+                            <li>满足不同院校的基础设施条件与预算需求</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">教学价值提升</h2>
+            <div class="section-content">
+                <div class="value-cards">
+                    <div class="value-card">
+                        <h3 class="value-card-title"><span class="number-badge">1</span> 打造优质教学资源库</h3>
+                        <p class="value-card-text">积累并沉淀各类教学案例、实验数据与代码模板，形成院校特色教学资源体系，持续提升教学质量</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <h3 class="value-card-title"><span class="number-badge">2</span> 推动教学模式创新</h3>
+                        <p class="value-card-text">支持翻转课堂、混合式教学、项目驱动等创新教学模式，提升学生参与度与学习效果</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <h3 class="value-card-title"><span class="number-badge">3</span> 构建数字化实践体系</h3>
+                        <p class="value-card-text">从基础编程到前沿AI应用，提供完整实践教学阶梯，培养学生全方位技术能力</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <h3 class="value-card-title"><span class="number-badge">4</span> 降低教学运营成本</h3>
+                        <p class="value-card-text">集中管理教学环境与计算资源，大幅降低管理成本，让教师专注于教学内容质量提升</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <h3 class="value-card-title"><span class="number-badge">5</span> 助力专业特色建设</h3>
+                        <p class="value-card-text">形成可持续发展的教学资源体系，为院校专业建设与认证评估提供有力支撑</p>
+                    </div>
+                </div>
+                
+                <div class="scenarios">
+                    <h3 class="scenario-title">应用场景</h3>
+                    <p>DSLAB支持多层次数字化教学场景：</p>
+                    <ul class="scenario-list">
+                        <li>
+                            <strong>基础编程课程</strong>
+                            程序设计、数据结构、算法等课程的实践教学
+                        </li>
+                        <li>
+                            <strong>数据分析课程</strong>
+                            统计分析、数据挖掘、可视化等实验教学
+                        </li>
+                        <li>
+                            <strong>人工智能课程</strong>
+                            机器学习、深度学习、大模型应用等前沿实践
+                        </li>
+                        <li>
+                            <strong>创新实践项目</strong>
+                            跨专业团队协作、创新创业项目孵化
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p class="tagline">数字教学创新，资源高效共享，特色人才培养</p>
+            <p class="copyright">DSLAB - 助力高校打造数字化人才培养新模式</p>
+        </div>
+    </footer>
+</body>
+</html>
