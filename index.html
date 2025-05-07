@@ -1,18 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DSLAB - 数字化教学实验平台</title>
+    <title>DSLAB - 数据科学与人工智能教学平台</title>
     <style>
         :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --accent-color: #e74c3c;
-            --light-bg: #f5f9fa;
-            --dark-bg: #2c3e50;
-            --text-color: #333;
-            --light-text: #f5f5f5;
+            --primary: #1e88e5;
+            --primary-dark: #1565c0;
+            --secondary: #26a69a;
+            --dark: #263238;
+            --light: #f8f9fa; /* 稍微调暗背景色，减少视觉疲劳 */
+            --accent: #ff8f00;
+            --text-color: #334155;
+            --light-text: #ffffff;
+            --card-bg: #ffffff;
+            --card-shadow: 0 8px 30px rgba(0,0,0,0.08); /* 更精致的阴影 */
+            --hover-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* 平滑过渡效果 */
         }
         
         * {
@@ -21,437 +25,763 @@
             box-sizing: border-box;
         }
         
+        /* 全局排版优化 */
         body {
-            font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-            line-height: 1.6;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.7; /* 增加行高，提高可读性 */
             color: var(--text-color);
-            background-color: var(--light-bg);
+            background-color: var(--light);
+            font-size: 16px; /* 基础字体大小 */
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 30px; /* 增加水平内边距 */
         }
         
         header {
-            background-color: var(--dark-bg);
-            color: var(--light-text);
-            padding: 20px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); /* 修改背景为渐变蓝 */
+            color: var(--light-text);    /* 使用浅色文字 */
+            padding: 70px 0;             /* 增加垂直内边距，使其更醒目 */
             text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            font-weight: 300;
-            margin-bottom: 20px;
-        }
-        
-        .role-selector {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 40px;
+            margin-bottom: 60px;         /* 与下方内容的间距 */
             position: relative;
-            z-index: 100;
+            overflow: hidden; /* 如果有背景图案，防止溢出 */
+        }
+
+        header h1 {
+            font-size: 2.8rem;           /* 主标题字号 */
+            margin-bottom: 15px;
+            font-weight: 700;            /* 加粗 */
+            color: var(--light-text);    /* 确保文字颜色 */
+        }
+
+        header h2 {
+            font-size: 1.5rem;           /* 副标题字号 */
+            margin-bottom: 25px;
+            font-weight: 300;            /* 细体 */
+            color: rgba(255, 255, 255, 0.85); /* 半透明白色，增加层次感 */
+        }
+
+        header .header-tagline {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.75); /* 更浅的文字颜色 */
+            max-width: 700px;            /* 限制标语宽度，提高可读性 */
+            margin: 0 auto;              /* 居中标语 */
         }
         
-        .dropdown {
+        section {
+            padding: 80px 0; /* 增加垂直间距，让内容更加舒适 */
+            position: relative; /* 为装饰元素定位做准备 */
+        }
+        
+        /* 标题样式优化 */
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px; /* 增加与内容的间距 */
+            color: var(--primary-dark);
             position: relative;
-            width: 300px;
+            font-size: 2.2rem; /* 更大的标题 */
+            font-weight: 600; /* 稍微加粗 */
         }
         
-        .dropdown-btn {
-            width: 100%;
-            padding: 12px 20px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            text-align: left;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        
-        .dropdown-btn:hover {
-            background-color: #2980b9;
-        }
-        
-        .dropdown-btn:after {
+        .section-title:after {
             content: '';
+            width: 80px; /* 调整宽度 */
+            height: 4px; /* 增加高度 */
+            background: linear-gradient(to right, var(--secondary), var(--primary)); /* 渐变效果 */
             position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-top: 6px solid white;
-            transition: transform 0.3s ease;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px; /* 圆角 */
         }
         
-        .dropdown.active .dropdown-btn:after {
-            transform: translateY(-50%) rotate(180deg);
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
         }
         
-        .dropdown-content {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            background-color: white;
-            border-radius: 0 0 5px 5px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            max-height: 0;
+        /* 卡片样式优化 */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px; /* 增加圆角 */
+            box-shadow: var(--card-shadow);
             overflow: hidden;
-            transition: max-height 0.3s ease;
+            transition: var(--hover-transition);
+            flex: 1 1 300px;
+            max-width: 350px;
+            border: 1px solid rgba(0,0,0,0.03); /* 微妙的边框 */
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); /* 渐变背景 */
+            color: white;
+            padding: 25px 20px; /* 增加内边距 */
+            text-align: center;
+            position: relative; /* 为装饰元素定位 */
+        }
+        
+        .card-header h3 {
+            font-size: 1.5rem;
+            margin: 0;
+            position: relative; /* 确保文字在装饰元素之上 */
             z-index: 1;
         }
         
-        .dropdown.active .dropdown-content {
-            max-height: 300px;
+        /* 为卡片头部添加装饰元素 */
+        .card-header:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1NiIgaGVpZ2h0PSIxMDAiPgo8cGF0aCBkPSJNMjggNjZMMCA1MEwwIDE2TDI4IDBMNTYgMTZMNTYgNTBMMjggNjZMMjggMTAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLW9wYWNpdHk9IjAuMiI+PC9wYXRoPgo8L3N2Zz4=');
+            opacity: 0.15;
         }
         
-        .dropdown-item {
-            padding: 12px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+        .card-body {
+            padding: 35px 30px; /* 增加内边距 */
         }
         
-        .dropdown-item:hover {
-            background-color: #f2f7ff;
-        }
-        
-        .dropdown-hint {
-            color: #999;
-            font-style: italic;
-            padding: 8px 20px;
-            border-bottom: 1px dashed #eee;
-            background-color: #f9f9f9;
-        }
-        
-        .content-section {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            display: none;
-        }
-        
-        .content-section.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .content-header {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--primary-color);
-        }
-        
-        .content-body p {
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--primary-dark);
             margin-bottom: 15px;
-            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
         }
         
-        .content-body ul {
-            margin-bottom: 20px;
-            padding-left: 20px;
+        .card-title .icon {
+            margin-right: 10px;
+            font-size: 1.8rem;
+            color: var(--secondary);
         }
         
-        .content-body li {
-            margin-bottom: 10px;
+        .feature-list {
+            list-style-type: none;
+        }
+        
+        .feature-list li {
+            margin-bottom: 12px;
             position: relative;
             padding-left: 25px;
         }
         
-        .content-body li:before {
+        .feature-list li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        
+        .advantages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .advantage-item {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .advantage-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .advantage-item h3 {
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .advantage-item .number {
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .scenarios {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .scenarios .section-title {
+            color: white;
+        }
+        
+        .scenarios .section-title:after {
+            background: white;
+        }
+        
+        .scenario-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .scenario-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1 1 200px;
+            max-width: 220px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        
+        .scenario-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .scenario-item h3 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .cta-section {
+            text-align: center;
+            background: var(--light);
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: background 0.3s ease, transform 0.3s ease;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(255,143,0,0.3);
+        }
+        
+        .cta-button:hover {
+            background: #f57c00;
+            transform: translateY(-3px);
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            font-size: 0.9rem;
+        }
+        
+        .intro-text {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+        }
+        
+        .intro-text strong {
+            color: var(--primary-dark);
+        }
+        
+        .value-list {
+            list-style: none;
+            margin: 30px auto;
+            max-width: 800px;
+        }
+        
+        .value-list li { /* Default style for all list items */
+            margin-bottom: 16px;
+            padding-left: 28px; /* Space for the bullet */
+            position: relative;
+        }
+        
+        .value-list li::before { /* Default bullet style */
             content: "•";
-            color: var(--primary-color);
-            font-size: 1.5rem;
+            color: var(--primary);
+            font-size: 24px;
+            position: absolute;
+            left: 0;
+            top: -2px; /* Adjust for vertical alignment */
+        }
+        
+        .value-list strong { /* Default strong style within list items */
+            color: var(--primary);
+        }
+
+        /* Styles for general value items */
+        .value-list .value-item-general strong {
+             /* Inherits default strong style or can be customized */
+        }
+
+        /* Styles for role-specific value items */
+        .value-list .value-item-role {
+            margin-top: 10px; /* Space above each role item */
+            padding: 15px 15px 15px 28px; /* Top, Right, Bottom, Left (maintaining left for bullet) */
+            background-color: #f8f9fa; /* Light background to distinguish */
+            border-left: 5px solid var(--secondary); /* Accent border */
+            border-radius: 0 8px 8px 0; /* Rounded corners on the right side */
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05); /* Subtle shadow */
+        }
+        
+        .value-list .value-item-role:first-of-type {
+             margin-top: 30px; /* More space before the first role-specific item */
+        }
+
+        .value-list .value-item-role::before {
+            /* Override default bullet for role items */
+            color: var(--secondary); /* Match accent border */
+            top: 15px; /* Adjust vertical position due to padding */
+            left: 0; /* Keep bullet aligned with general items */
+        }
+
+        .value-list .value-item-role strong {
+            /* Style for the role title (e.g., "为教师:") */
+            display: block; /* Role title on its own line */
+            color: var(--primary-dark); /* Darker color for emphasis */
+            font-size: 1.1em; /* Slightly larger font */
+            margin-bottom: 8px; /* Space below the role title */
+        }
+        
+        .value-list li {
+            margin-bottom: 16px;
+            padding-left: 28px;
+            position: relative;
+        }
+        
+        .value-list li::before {
+            content: "•";
+            color: var(--primary);
+            font-size: 24px;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+        
+        .value-list strong {
+            color: var(--primary);
+        }
+
+        /* New styles for value categorization */
+        .platform-values, .role-values-section {
+            margin-bottom: 50px;
+        }
+
+        .platform-values h3, .role-values-section h3 {
+            font-size: 1.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .platform-values h3::after, .role-values-section h3::after {
+            content: '';
+            display: block;
+            width: 70px;
+            height: 3px;
+            background-color: var(--secondary);
+            margin: 10px auto 0;
+        }
+        
+        /* 平台核心优势列表美化 */
+        .platform-specific-values {
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--card-bg);
+            padding: 35px 40px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+        }
+        
+        /* 为平台优势列表添加装饰元素 */
+        .platform-specific-values:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .value-list li {
+            margin-bottom: 20px; /* 增加项目间距 */
+            padding-left: 35px; /* 增加左侧内边距 */
+            position: relative;
+        }
+        
+        .value-list li:last-child {
+            margin-bottom: 0; /* 移除最后一项的底部边距 */
+        }
+        
+        .value-list li::before {
+            content: "•";
+            color: var(--primary);
+            font-size: 28px; /* 增大圆点大小 */
             position: absolute;
             left: 0;
             top: -5px;
         }
         
-        .feature-card {
-            background-color: #f2f7ff;
-            border-left: 4px solid var(--primary-color);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 4px;
+        .value-list strong {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.1rem; /* 稍微增大强调文本 */
         }
         
-        .feature-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: var(--dark-bg);
-            color: var(--light-text);
+        /* 角色价值区块优化 */
+        .role-value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px; /* 增加间距 */
             margin-top: 40px;
         }
         
+        .role-value-item {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: var(--hover-transition);
+            border-left: 5px solid var(--secondary);
+            position: relative; /* 为装饰元素定位 */
+            overflow: hidden; /* 确保装饰元素不溢出 */
+        }
+        
+        .role-value-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        /* 为角色价值卡片添加装饰元素 */
+        .role-value-item:before {
+            content: "";
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 100px;
+            height: 100px;
+            background: var(--secondary);
+            opacity: 0.05;
+            border-radius: 50%;
+        }
+        
+        .role-value-item h4 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            position: relative; /* 确保文字在装饰元素之上 */
+            z-index: 1;
+        }
+        
+        .role-value-item p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            position: relative; /* 确保文字在装饰元素之上 */
+            z-index: 1;
+        }
+        
+        .core-values .card-container { /* Ensure spacing for existing cards */
+            margin-top: 50px;
+        }
+        
         @media (max-width: 768px) {
-            .container {
-                padding: 10px;
+            header h1 {
+                font-size: 2.2rem;
             }
             
-            h1 {
-                font-size: 2rem;
+            header h2 {
+                font-size: 1.3rem;
             }
             
-            .dropdown {
-                width: 100%;
+            .card-container, .advantages {
+                flex-direction: column;
+                align-items: center;
             }
             
-            .content-section {
-                padding: 20px;
+            .card, .advantage-item {
+                max-width: 100%;
             }
+        }
+        /* 添加全局装饰元素 */
+        .core-values {
+            position: relative;
+            overflow: hidden; /* 确保装饰元素不溢出 */
+        }
+        
+        /* 添加背景装饰 */
+        .core-values:before {
+            content: "";
+            position: absolute;
+            top: 50px;
+            right: -150px;
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            opacity: 0.03;
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        .core-values:after {
+            content: "";
+            position: absolute;
+            bottom: 100px;
+            left: -150px;
+            width: 250px;
+            height: 250px;
+            background: var(--secondary);
+            opacity: 0.03;
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        /* 确保内容在装饰元素之上 */
+        .core-values .container {
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>DSLAB 数字化教学实验平台</h1>
-            <p class="subtitle">赋能教育数字化转型，构筑人才培养新基建</p>
+            <h1>DSLAB 数据科学与人工智能教学平台</h1>
+            <h2>数字化教学的创新解决方案</h2>
+            <p class="header-tagline">「资源集约管理，教学特色建设，一人一空间，一课一环境」</p>
         </div>
     </header>
     
-    <div class="container">
-        <div class="role-selector">
-            <div class="dropdown">
-                <button class="dropdown-btn">选择您的角色查看详情</button>
-                <div class="dropdown-content">
-                    <div class="dropdown-hint">请选择您的身份/角色，查看针对性内容</div>
-                    <div class="dropdown-item" data-role="overview">平台概览</div>
-                    <div class="dropdown-item" data-role="teacher">教师</div>
-                    <div class="dropdown-item" data-role="manager">教学管理者</div>
-                    <div class="dropdown-item" data-role="leader">学校领导</div>
-                    <div class="dropdown-item" data-role="it">技术人员</div>
-                    <div class="dropdown-item" data-role="investor">投资人</div>
+    <section class="core-values">
+        <div class="container">
+            <h2 class="section-title">核心价值</h2>
+            <p class="intro-text">
+                DSLAB是基于项目式学习(PBL)理念打造的<strong>数字化教学平台</strong>，为高校人工智能与数据科学教育提供全方位支持，实现教学资源优化配置与高效共享。
+            </p>
+            
+            <div class="platform-values">
+                <h3>平台核心优势</h3>
+                <ul class="value-list platform-specific-values">
+                    <li><strong>教学模式创新</strong>：突破传统机房限制，让师生通过浏览器即可开展高质量实践教学</li>
+                    <li><strong>资源集约管理</strong>：实现计算资源、教学内容的集中调度与共享，大幅提升利用效率</li>
+                    <li><strong>教学特色构建</strong>：帮助院校沉淀优质教学资源，打造专业特色与教学品牌</li>
+                    <li><strong>人才培养赋能</strong>：为学生提供与行业接轨的实践平台，提升综合竞争力与就业前景</li>
+                </ul>
+            </div>
+
+            <div class="role-values-section">
+                <h3>为不同角色创造价值</h3>
+                <div class="role-value-grid">
+                    <div class="role-value-item">
+                        <h4>为教师</h4>
+                        <p>提供标准化环境、即时计算资源、简化教学流程、广泛技术支持及教学资源沉淀复用，让教师聚焦核心教学。</p>
+                    </div>
+                    <div class="role-value-item">
+                        <h4>为教学管理者</h4>
+                        <p>强化前沿课程教学，优化资源配置，提升教学质量与管理效能，打造一流数字化课程体系。</p>
+                    </div>
+                    <div class="role-value-item">
+                        <h4>为学校管理者</h4>
+                        <p>助力教育数字化转型，构筑人才培养新基建，提升学校核心竞争力与社会影响力。</p>
+                    </div>
+                    <div class="role-value-item">
+                        <h4>为技术管理者</h4>
+                        <p>提供云原生、高可靠、易扩展的平台架构，简化部署与运维管理，保障教学科研活动高效稳定运行。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>数字化教学环境</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>零门槛、全浏览器操作，随时随地开展AI与数据科学教学。虚拟化技术打造的个性化教学空间，让复杂的计算与实验触手可及。</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>五大核心元素智能管理</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>数据、算力、代码、课件、软件环境的数字化整合与调度。通过LMS课程管理系统实现教学资源的高效配置和智能授权复用。</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>数据驱动教学改革</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>已助力多所双一流高校获省级教改项目及多门省级高阶课程认证。提供教学大数据分析支持教学决策优化，持续提升教学质量。</p>
+                    </div>
                 </div>
             </div>
         </div>
-        
-        <!-- 平台概览内容 -->
-        <section id="overview-content" class="content-section active">
-            <h2 class="content-header">DSLAB：新一代数字化教学实验平台</h2>
-            <div class="content-body">
-                <p>DSLAB (Digital Service LAB) 是一个专为高等教育设计的一体化数字化实践教学解决方案，致力于解决计算密集型课程（如程序设计、数据科学、人工智能等）实践教学中的关键挑战。</p>
-                
-                <p>作为新一代数字化教学基础设施，DSLAB具有以下核心特性：</p>
-                
-                <div class="feature-card">
-                    <h3>云原生架构</h3>
-                    <p>基于Kubernetes (K8s)构建的微服务架构，提供高可靠性、可扩展性和灵活部署能力，支持私有化部署或公有云服务模式。</p>
+    </section>
+    
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">平台优势</h2>
+            
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <span class="icon">🔹</span>
+                            简化教学环境
+                        </h3>
+                        <ul class="feature-list">
+                            <li>浏览器即可完成所有操作，无需复杂软件安装与配置</li>
+                            <li>统一的教学环境确保师生体验一致，消除"我这里能运行"问题</li>
+                            <li>内置AI助教，为学生提供即时学习支持</li>
+                        </ul>
+                    </div>
                 </div>
                 
-                <div class="feature-card">
-                    <h3>标准化实验环境</h3>
-                    <p>为每位用户提供基于云端的、完全一致的隔离实验空间，学生仅需浏览器即可访问，彻底解决环境差异导致的教学问题。</p>
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <span class="icon">🔹</span>
+                            优化教学资源配置
+                        </h3>
+                        <ul class="feature-list">
+                            <li>计算资源按需分配，避免设备闲置浪费</li>
+                            <li>课程内容、案例与数据集中管理，形成可积累的教学资产</li>
+                            <li>支持Python、Java+SQL、R、Matlab、Stata等多种语言的教学与实践需求</li>
+                        </ul>
+                    </div>
                 </div>
                 
-                <div class="feature-card">
-                    <h3>高效资源管理</h3>
-                    <p>智能调度和管理计算资源（CPU/GPU）、存储及软件环境，显著提高资源利用率，降低重复建设成本。</p>
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <span class="icon">🔹</span>
+                            提升管理效能
+                        </h3>
+                        <ul class="feature-list">
+                            <li>一体化课程管理系统整合教、学、练全环节</li>
+                            <li>课程参与度和实验完成情况实时监控，助力教师精准干预学习过程</li>
+                            <li>简化IT运维工作，降低技术支持成本</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="advantages-section">
+        <div class="container">
+            <h2 class="section-title">教学价值提升</h2>
+            
+            <div class="advantages">
+                <div class="advantage-item">
+                    <h3><span class="number">1</span> 打造优质教学资源库</h3>
+                    <p>积累并沉淀各类教学案例、实验数据与代码模板，形成院校特色教学资源体系，持续提升教学质量。</p>
                 </div>
                 
-                <div class="feature-card">
-                    <h3>多元技术支持</h3>
-                    <p>支持Python, R, Java, Matlab*, Stata*等多种主流编程语言和分析工具，并内置JupyterLab, Pytorch等常用框架，满足多样化教学需求。</p>
+                <div class="advantage-item">
+                    <h3><span class="number">2</span> 推动教学模式创新</h3>
+                    <p>支持翻转课堂、混合式教学、项目驱动等创新教学模式，提升学生参与度与学习效果。</p>
                 </div>
                 
-                <div class="feature-card">
-                    <h3>一体化教学管理</h3>
-                    <p>集成课程管理（LMS）、数据管理（DMS）、环境管理等功能，实现教学全流程的数字化、规范化管理，提升教学效率。</p>
+                <div class="advantage-item">
+                    <h3><span class="number">3</span> 构建数字化实践体系</h3>
+                    <p>从基础编程到前沿AI应用，提供完整实践教学阶梯，为学生全方位技术能力。</p>
                 </div>
                 
-                <p>DSLAB已成功应用于国内多所双一流高校，为AI、大数据分析、金融科技等前沿领域的教学提供强大支撑，助力高校构建特色化、高水平的数字化教学体系。</p>
+                <div class="advantage-item">
+                    <h3><span class="number">4</span> 降低教学运营成本</h3>
+                    <p>集中管理教学环境与计算资源，大幅降低管理成本，让教师专注于教学内容质量提升。</p>
+                </div>
                 
-                <p>请从上方下拉菜单选择您的角色，了解DSLAB如何为您提供专属价值。</p>
+                <div class="advantage-item">
+                    <h3><span class="number">5</span> 助力专业特色建设</h3>
+                    <p>形成可持续发展的教学资源体系，为院校专业建设与认证评估提供有力支撑。</p>
+                </div>
             </div>
-        </section>
-        
-        <!-- 教师内容 -->
-        <section id="teacher-content" class="content-section">
-            <h2 class="content-header">DSLAB：赋能高效实践教学，聚焦核心教学内容</h2>
-            <div class="content-body">
-                <p>DSLAB是一个专为解决现代计算密集型课程（如程序设计、数据科学、人工智能等）实践教学挑战而设计的一体化在线平台。它旨在帮助您摆脱繁琐的实验环境配置与管理事务，将精力聚焦于课程设计与学生指导。</p>
+        </div>
+    </section>
+    
+    <section class="scenarios">
+        <div class="container">
+            <h2 class="section-title">应用场景</h2>
+            
+            <div class="scenario-list">
+                <div class="scenario-item">
+                    <h3>基础编程课程</h3>
+                    <p>程序设计、数据结构、算法等课程的实践教学</p>
+                </div>
                 
-                <p>DSLAB为您的教学带来：</p>
+                <div class="scenario-item">
+                    <h3>数据分析课程</h3>
+                    <p>统计分析、数据挖掘、可视化等实验教学</p>
+                </div>
                 
-                <ul>
-                    <li><strong>标准化、一致性的实验环境：</strong> 为每位学生提供基于云端的、与教师环境完全一致的隔离实验空间，学生仅需浏览器即可访问，彻底解决环境差异导致的教学问题。</li>
-                    <li><strong>即时可用的计算资源：</strong> 按需为课程和学生分配所需的计算能力，包括高性能CPU和GPU资源，轻松支持计算密集型实验，无需依赖特定机房。</li>
-                    <li><strong>简化的教学流程：</strong> 平台集成数据、代码、软件环境和课件管理，简化备课、实验分发与课业提交流程，提高教学效率。</li>
-                    <li><strong>广泛的技术栈支持：</strong> 支持Python, R, Java, Matlab*, Stata*等多种主流编程语言和分析工具，并内置JupyterLab, Pytorch等常用框架，满足多样化教学需求。 (*需相应软件授权)</li>
-                    <li><strong>教学资源沉淀与复用：</strong> 便于积累和管理教学案例、数据集、代码等资源，实现高效复用与共享。</li>
-                </ul>
+                <div class="scenario-item">
+                    <h3>人工智能课程</h3>
+                    <p>机器学习、深度学习、大模型应用等前沿实践</p>
+                </div>
                 
-                <p>DSLAB旨在成为您强大的教学助手，让您更专注于知识传授与学生能力的培养。</p>
+                <div class="scenario-item">
+                    <h3>创新实践项目</h3>
+                    <p>跨专业团队协作、创新创业项目孵化</p>
+                </div>
+                
+                <div class="scenario-item">
+                    <h3>科研与教学融合</h3>
+                    <p>科研资源与教学场景的数字化整合</p>
+                </div>
             </div>
-        </section>
-        
-        <!-- 教学管理者内容 -->
-        <section id="manager-content" class="content-section">
-            <h2 class="content-header">DSLAB：提升教学质量与管理效能，打造一流数字化课程体系</h2>
-            <div class="content-body">
-                <p>DSLAB (Digital Service LAB) 是一套一体化的数字化实践教学解决方案，旨在全面提升贵单位在计算机科学、数据科学、人工智能及相关交叉学科领域的教学水平、管理效率与创新能力。</p>
-                
-                <p>DSLAB的核心价值体现在：</p>
-                
-                <ul>
-                    <li><strong>强化前沿课程教学能力：</strong> 为开设和深化AI、大数据分析、金融科技等对计算资源和实践环境要求高的课程提供强大支撑，确保教学质量与行业发展同步。</li>
-                    <li><strong>优化教学资源配置与利用：</strong> 通过云原生技术和虚拟化，高效整合、调度和管理计算资源（CPU/GPU）、存储及软件环境，显著提高资源利用率，降低重复建设成本。</li>
-                    <li><strong>推动教学模式创新：</strong> 支持PBL项目式学习、MOOP大规模开放在线实践等教学模式，促进理论与实践深度融合，激发学生创新潜能，助力一流课程建设与教学成果申报。已有合作院校依托平台获得省级教改项目及高阶课程荣誉。</li>
-                    <li><strong>提升教学管理规范化水平：</strong> 平台集成课程管理（LMS）、数据管理（DMS）、环境管理等功能，实现教学全流程的数字化、规范化管理，提升教学管理效率。</li>
-                    <li><strong>降低综合教学成本：</strong> 减少对传统高配置机房的依赖和维护负担，简化软件授权管理，降低整体教学运作成本。</li>
-                </ul>
-                
-                <p>我们相信，DSLAB能有效助力贵单位构建特色化、高水平的数字化教学体系，提升人才培养质量和学科竞争力。</p>
-            </div>
-        </section>
-        
-        <!-- 学校领导内容 -->
-        <section id="leader-content" class="content-section">
-            <h2 class="content-header">DSLAB：赋能教育数字化转型，构筑人才培养新基建</h2>
-            <div class="content-body">
-                <p>在全球教育数字化浪潮和国家对拔尖创新人才培养的战略需求背景下，DSLAB (Digital Service LAB) 作为新一代数字化教学基础设施平台，旨在为贵校在人工智能、数据科学等关键领域的教学改革与创新提供强有力的支撑。</p>
-                
-                <p>DSLAB为学校带来的战略价值：</p>
-                
-                <ul>
-                    <li><strong>支撑高水平人才培养：</strong> 为国家战略新兴产业相关专业提供与行业标准接轨的先进实践教学环境，提升学生的核心竞争力，服务于学校人才培养的顶层目标。</li>
-                    <li><strong>优化IT资产投资效益：</strong> 基于云原生架构，高效整合并最大化利用校内现有计算资源（服务器、GPU等），通过资源虚拟化与共享机制，显著提升IT资产回报率，避免资源闲置与重复投资。</li>
-                    <li><strong>引领教学创新与改革：</strong> 支持先进教学理念落地，促进教学模式从传统向现代化、智能化转型，助力学校产出高水平教学成果，提升在国内外的学术声誉与影响力。</li>
-                    <li><strong>实现降本增效与绿色发展：</strong> 通过集中化管理和云端服务模式，有效降低物理空间占用、硬件运维及软件管理成本，符合智慧校园和可持续发展的建设方向。</li>
-                    <li><strong>提升学校数字化形象：</strong> 部署先进、统一的数字化教学平台，是学校紧跟技术发展、深化教育教学改革决心的重要体现，有助于吸引优秀生源和师资。</li>
-                </ul>
-                
-                <p>DSLAB提供灵活的部署模式（本地私有化或公有云服务），能够与贵校的整体信息化规划紧密结合。</p>
-            </div>
-        </section>
-        
-        <!-- 技术人员内容 -->
-        <section id="it-content" class="content-section">
-            <h2 class="content-header">DSLAB：简化运维管理，构建稳定高效的教学实验云平台</h2>
-            <div class="content-body">
-                <p>DSLAB (Digital Service LAB) 是一个基于云原生技术构建的现代化教学实验平台，旨在简化计算密集型课程实验环境的部署、管理和维护工作，提升运维效率和系统稳定性。</p>
-                
-                <p>DSLAB平台的技术特性与优势：</p>
-                
-                <ul>
-                    <li><strong>云原生架构，易于部署与扩展：</strong> 采用Kubernetes (K8s) 进行全局微服务调度，支持容器化部署，具有良好的伸缩性和可靠性。</li>
-                    <li><strong>集中化、标准化的环境管理：</strong> 通过镜像管理服务（如Harbor），实现教学环境的标准化封装与版本控制。教师可基于基础镜像进行定制，IT部门无需为每门课程单独配置。</li>
-                    <li><strong>高效的资源调度与监控：</strong> 提供统一的管理后台，实现对CPU、内存、存储以及GPU虚拟化资源（vGPU）的精细化分配、监控和使用情况分析，优化资源利用。</li>
-                    <li><strong>隔离与安全：</strong> 每个实验环境在独立的容器中运行，保障了环境间和用户间的隔离性与安全性。支持与校内统一身份认证系统集成。</li>
-                    <li><strong>降低运维支持负担：</strong> "一人一空间，一课一环境"模式极大减少了因用户本地环境配置问题产生的技术支持需求。平台提供清晰的日志和监控，便于问题排查。</li>
-                    <li><strong>灵活的集成能力：</strong> 支持对象存储（S3/Minio/Ceph）、版本管理（Git）等，并提供API接口，便于与校园现有IT生态系统整合。</li>
-                </ul>
-                
-                <p>DSLAB旨在成为IT部门的得力助手，提供一个稳定、高效、易于管理的教学实验平台解决方案。</p>
-            </div>
-        </section>
-        
-        <!-- 投资人内容 -->
-        <section id="investor-content" class="content-section">
-            <h2 class="content-header">DSLAB：把握AI+教育蓝海机遇，投资下一代数字化教学平台</h2>
-            <div class="content-body">
-                <p>DSLAB (Digital Service LAB) 是一家专注于高等教育领域数字化教学解决方案的创新科技企业。我们精准切入人工智能、数据科学等高增长领域的实践教学市场，致力于解决高校在相关人才培养中面临的效率、成本和资源瓶颈。</p>
-                
-                <p>DSLAB的投资亮点：</p>
-                
-                <ul>
-                    <li><strong>巨大的市场潜力：</strong> 全球高校对AI、大数据等领域实践教学平台的需求激增，传统方案难以满足，市场空间广阔，正处于高速增长期。</li>
-                    <li><strong>差异化的产品与技术壁垒：</strong> DSLAB并非单一工具，而是融合了课程管理(LMS)、计算资源调度、数据管理、环境管理的一体化云原生平台。其"五类元素"统一管理和灵活部署能力构筑了显著的竞争优势。</li>
-                    <li><strong>清晰且经验证的商业模式：</strong> 主要面向高校提供私有化部署或SaaS服务，收费模式清晰。产品已成功应用于国内多所双一流高校，并获得高度认可，商业模式得到初步验证。</li>
-                    <li><strong>可观的客户价值与ROI：</strong> 显著提升高校教学效率与质量，优化IT资源利用率，降低教学成本，客户价值明确，粘性高。</li>
-                    <li><strong>强大的可扩展性：</strong> 平台架构先进，易于扩展支持更多学科领域、集成AI助教等增值服务，具备持续增长潜力。</li>
-                    <li><strong>经验丰富的团队：</strong> 核心团队兼具深厚的教育行业理解与领先的云计算、大数据技术实力。</li>
-                </ul>
-                
-                <p>DSLAB正处于快速成长期，本轮融资将主要用于加速市场拓展、渠道建设和产品研发。</p>
-            </div>
-        </section>
-    </div>
+        </div>
+    </section>
+    
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="section-title">开启数字化教学新时代</h2>
+            <p>DSLAB为您的教学带来革命性变革，打造智能化、个性化、高效化的教学体验</p>
+            <a href="https://z3nexd50bwk.typeform.com/to/I10FGFsr" class="cta-button">申请演示</a>
+        </div>
+    </section>
     
     <footer>
         <div class="container">
-            <p>© 2024 DSLAB - 数字化教学实验平台 | 赋能教育数字化转型</p>
+            <p class="tagline">数字教学创新，资源高效共享，特色人才培养</p>
+            <p>DSLAB - 助力高校打造数字化人才培养新模式</p>
         </div>
     </footer>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dropdown = document.querySelector('.dropdown');
-            const dropdownBtn = document.querySelector('.dropdown-btn');
-            const dropdownItems = document.querySelectorAll('.dropdown-item');
-            const contentSections = document.querySelectorAll('.content-section');
-            
-            // 下拉菜单点击事件
-            dropdownBtn.addEventListener('click', function() {
-                dropdown.classList.toggle('active');
-            });
-            
-            // 点击页面其他地方关闭下拉菜单
-            document.addEventListener('click', function(event) {
-                if (!dropdown.contains(event.target)) {
-                    dropdown.classList.remove('active');
-                }
-            });
-            
-            // 选择角色
-            dropdownItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const role = this.getAttribute('data-role');
-                    
-                    // 更新按钮文本
-                    if (role === 'overview') {
-                        dropdownBtn.textContent = '平台概览';
-                    } else if (role === 'teacher') {
-                        dropdownBtn.textContent = '教师';
-                    } else if (role === 'manager') {
-                        dropdownBtn.textContent = '教学管理者';
-                    } else if (role === 'leader') {
-                        dropdownBtn.textContent = '学校领导';
-                    } else if (role === 'it') {
-                        dropdownBtn.textContent = '技术人员';
-                    } else if (role === 'investor') {
-                        dropdownBtn.textContent = '投资人';
-                    }
-                    
-                    // 隐藏所有内容
-                    contentSections.forEach(section => section.classList.remove('active'));
-                    
-                    // 显示对应内容
-                    document.getElementById(`${role}-content`).classList.add('active');
-                    
-                    // 关闭下拉菜单
-                    dropdown.classList.remove('active');
-                });
-            });
-        });
-    </script>
 </body>
 </html>
